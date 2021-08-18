@@ -2,6 +2,8 @@ package com.maven.bank;
 
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
+import com.maven.bank.entities.Account;
+import com.maven.bank.entities.Customer;
 import com.maven.bank.exceptions.MavenBankTransactionException;
 import com.maven.bank.services.BankService;
 import org.junit.jupiter.api.*;

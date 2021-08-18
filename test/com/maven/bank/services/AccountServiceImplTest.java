@@ -1,7 +1,7 @@
 package com.maven.bank.services;
 
-import com.maven.bank.Account;
-import com.maven.bank.Customer;
+import com.maven.bank.entities.Account;
+import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
 import com.maven.bank.exceptions.MavenBankException;
@@ -280,7 +280,7 @@ public class AccountServiceImplTest {
             Account johnSavingsAccount = accountService.findAccount(1000110001);
             BigDecimal accountBalance = accountService.deposit(new BigDecimal(50000), 1000110001);
             assertEquals(accountBalance, johnSavingsAccount.getBalance());
-            johnSavingsAccount.setAccountPin("0000");
+
         }catch (MavenBankException | MavenBankInsufficientBankException e){
             e.printStackTrace();
         }

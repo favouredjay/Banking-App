@@ -1,6 +1,6 @@
 package com.maven.bank.services;
-import com.maven.bank.Account;
-import com.maven.bank.Customer;
+import com.maven.bank.entities.Account;
+import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.exceptions.MavenBankException;
 import com.maven.bank.exceptions.MavenBankInsufficientBankException;

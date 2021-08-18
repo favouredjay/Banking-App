@@ -1,8 +1,7 @@
 package com.maven.bank.dataStore;
 
-import com.maven.bank.Account;
-import com.maven.bank.Customer;
-import com.maven.bank.services.BankService;
+import com.maven.bank.entities.Account;
+import com.maven.bank.entities.Customer;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

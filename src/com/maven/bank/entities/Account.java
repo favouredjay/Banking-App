@@ -1,4 +1,4 @@
-package com.maven.bank;
+package com.maven.bank.entities;
 
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.exceptions.MavenBankTransactionException;
