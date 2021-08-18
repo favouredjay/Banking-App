@@ -4,7 +4,9 @@ import com.maven.bank.Account;
 import com.maven.bank.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
+import com.maven.bank.dataStore.TransactionType;
 import com.maven.bank.exceptions.MavenBankException;
+import com.maven.bank.exceptions.MavenBankInsufficientBankException;
 import com.maven.bank.exceptions.MavenBankTransactionException;
 
 import java.math.BigDecimal;
@@ -30,31 +32,49 @@ public class AccountServiceImpl implements AccountServices {
     }
 
     @Override
-    public BigDecimal deposit(BigDecimal amount, long accountNumber) throws MavenBankTransactionException, MavenBankException {
-            if(amount.compareTo(BigDecimal.ZERO) < 0){
-                throw new MavenBankTransactionException("Deposit cannot be negative");
-            }
-        BigDecimal newBalance = BigDecimal.ZERO;
-        Account depositAccount = findAccount(accountNumber);
-        newBalance = depositAccount.getBalance().add(amount);
-        depositAccount.setBalance(newBalance);
+    public BigDecimal deposit(BigDecimal amount, long accountNumber) throws MavenBankTransactionException, MavenBankException, MavenBankInsufficientBankException {
+
+
+        Account theAccount= findAccount(accountNumber);
+       transactionType(amount,theAccount, TransactionType.DEPOSIT);
+        BigDecimal newBalance = theAccount.getBalance().add(amount);
+        theAccount.setBalance(newBalance);
         return newBalance;
     }
+
+
 
     @Override
-    public BigDecimal withdraw(BigDecimal amount, long accountNumber, String pin) throws MavenBankException {
-        Account withdrawAccount = findAccount(accountNumber);
-        if(amount.compareTo(BigDecimal.ZERO)<= BigDecimal.ONE.intValue()){
-            throw new MavenBankTransactionException("Invalid withdrawal amount");
-        }
-        BigDecimal newBalance = BigDecimal.ZERO;
+    public BigDecimal withdraw(BigDecimal amount, long accountNumber) throws MavenBankException, MavenBankInsufficientBankException {
+            Account theAccount= findAccount(accountNumber);
+            transactionType(amount, theAccount, TransactionType.WITHDRAW);
+            BigDecimal newBalance = debitAccount(amount, accountNumber);
 
-        if(amount.compareTo(BigDecimal.ZERO) > 0 && Account.getAccountPin().equals(pin)) {
-            newBalance = withdrawAccount.getBalance().subtract(amount);
-            withdrawAccount.setBalance(newBalance);
-        }
         return newBalance;
     }
+
+    private BigDecimal debitAccount(BigDecimal amount, long accountNumber) throws MavenBankException {
+            Account theAccount = findAccount(accountNumber);
+        BigDecimal newBalance = theAccount.getBalance().subtract(amount);
+        theAccount.setBalance(newBalance);
+        return newBalance;
+    }
+
+//    public void validateWithdraw(BigDecimal amount, Account account) throws MavenBankInsufficientBankException, MavenBankException {
+//
+//    if(amount.compareTo(BigDecimal.ZERO)< BigDecimal.ONE.intValue()){
+//        throw new MavenBankInsufficientBankException("Invalid withdrawal amount");
+//    }
+//    Account withdrawAccount = findAccount(account);
+//    if(withdrawAccount == null){
+//        throw new MavenBankException("Account not found");
+//    }
+//    Account depositAccount = findAccount(account);
+//    if(amount.compareTo(depositAccount.getBalance()) > 0){
+//        throw new MavenBankInsufficientBankException("Insufficient Account balance");
+//    }
+
+
 
     @Override
     public Account findAccount(long accountNumber) throws MavenBankException {
@@ -91,8 +111,23 @@ public class AccountServiceImpl implements AccountServices {
         }
         return accountTypeExists;
 
-
     }
+   public void transactionType(BigDecimal amount, Account account, TransactionType type) throws MavenBankException, MavenBankInsufficientBankException {
+       if(amount.compareTo(BigDecimal.ZERO)< BigDecimal.ZERO.intValue()){
+           throw new MavenBankTransactionException("Amount cannot be negative");
+       }
+
+       if(account == null){
+           throw new MavenBankException("Account not found");
+       }
+
+       if(type== TransactionType.WITHDRAW&& amount.compareTo(account.getBalance()) > BigDecimal.ZERO.intValue()){
+           throw new MavenBankInsufficientBankException("Insufficient Account balance");
+       }
+
+
+   }
+
 
 
 
