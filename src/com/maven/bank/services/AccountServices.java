@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 
 public interface AccountServices {
      public long openAccount(Customer theCustomer, AccountType type) throws MavenBankException;
+     public long openSavingsAccount(Customer customer) throws MavenBankException;
+     public long openCurrentAccount(Customer customer) throws MavenBankException;
      public BigDecimal deposit(BigDecimal amount, long accountNumber) throws MavenBankTransactionException, MavenBankException, MavenBankInsufficientBankException;
      public BigDecimal withdraw(BigDecimal amount, long accountNumber) throws MavenBankException, MavenBankInsufficientBankException;
      public Account findAccount(long accountNumber) throws MavenBankException;
