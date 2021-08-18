@@ -14,6 +14,7 @@ public interface AccountServices {
      public BigDecimal withdraw(BigDecimal amount, long accountNumber) throws MavenBankException, MavenBankInsufficientBankException;
      public Account findAccount(long accountNumber) throws MavenBankException;
      public Account findAccount(Customer customer, long accountNumber) throws MavenBankException;
+     public void applyForOverdraft(Account theAccount);
 
 
 

@@ -36,7 +36,8 @@ public class AccountServiceImpl implements AccountServices {
 
 
         Account theAccount= findAccount(accountNumber);
-       transactionType(amount,theAccount, TransactionType.DEPOSIT);
+       transactionType(amount,theAccount);
+
         BigDecimal newBalance = theAccount.getBalance().add(amount);
         theAccount.setBalance(newBalance);
         return newBalance;
@@ -47,7 +48,13 @@ public class AccountServiceImpl implements AccountServices {
     @Override
     public BigDecimal withdraw(BigDecimal amount, long accountNumber) throws MavenBankException, MavenBankInsufficientBankException {
             Account theAccount= findAccount(accountNumber);
-            transactionType(amount, theAccount, TransactionType.WITHDRAW);
+            transactionType(amount, theAccount);
+            try {
+                checkForInsufficientAmount(amount, theAccount, TransactionType.WITHDRAW);
+            }
+            catch (MavenBankInsufficientBankException e){
+                this.applyForOverdraft(theAccount);
+            }
             BigDecimal newBalance = debitAccount(amount, accountNumber);
 
         return newBalance;
@@ -101,6 +108,11 @@ public class AccountServiceImpl implements AccountServices {
         return null;
     }
 
+    @Override
+    public void applyForOverdraft(Account theAccount) {
+        //TODO
+    }
+
     private boolean accountTypeExists (Customer aCustomer, AccountType type){
         boolean accountTypeExists = false;
         for (Account customerAccount : aCustomer.getAccounts()) {
@@ -112,7 +124,7 @@ public class AccountServiceImpl implements AccountServices {
         return accountTypeExists;
 
     }
-   public void transactionType(BigDecimal amount, Account account, TransactionType type) throws MavenBankException, MavenBankInsufficientBankException {
+   public void transactionType(BigDecimal amount, Account account) throws MavenBankException, MavenBankInsufficientBankException {
        if(amount.compareTo(BigDecimal.ZERO)< BigDecimal.ZERO.intValue()){
            throw new MavenBankTransactionException("Amount cannot be negative");
        }
@@ -121,10 +133,13 @@ public class AccountServiceImpl implements AccountServices {
            throw new MavenBankException("Account not found");
        }
 
+
+
+   }
+   public void checkForInsufficientAmount(BigDecimal amount, Account account, TransactionType type) throws MavenBankInsufficientBankException {
        if(type== TransactionType.WITHDRAW&& amount.compareTo(account.getBalance()) > BigDecimal.ZERO.intValue()){
            throw new MavenBankInsufficientBankException("Insufficient Account balance");
        }
-
 
    }
 
