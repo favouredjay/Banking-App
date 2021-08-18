@@ -1,9 +1,11 @@
 package com.maven.bank.services;
 
+import com.maven.bank.dataStore.LoanStatus;
 import com.maven.bank.entities.Account;
 import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
+import com.maven.bank.entities.Loan;
 import com.maven.bank.exceptions.MavenBankException;
 import com.maven.bank.exceptions.MavenBankInsufficientBankException;
 import com.maven.bank.exceptions.MavenBankTransactionException;
@@ -12,8 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.maven.bank.dataStore.LoanStatus.NEW;
+import static com.maven.bank.dataStore.LoanType.SME;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountServiceImplTest {
@@ -287,6 +292,25 @@ public class AccountServiceImplTest {
         }
 
         assertThrows(MavenBankInsufficientBankException.class,()->accountService.withdraw(new BigDecimal(100000), 1000110001));
+    }
+    @Test
+    void applyForLoan(){
+        Loan johnLoan = new Loan();
+        johnLoan.setLoanAmount(BigDecimal.valueOf(50000000));
+        johnLoan.setStartDate(LocalDateTime.now());
+        johnLoan.setInterestRate(0.1);
+        johnLoan.setStatus(NEW);
+        johnLoan.setTenor(24);
+        johnLoan.setType(SME);
+        try{
+            Account johnCurrentAccount = accountService.findAccount(1000110002);
+            assertNull(johnCurrentAccount.getAccountLoan());
+            johnCurrentAccount.setAccountLoan(johnLoan);
+            LoanStatus decision = accountService.applyForLoan(johnCurrentAccount);
+            assertNotNull(johnCurrentAccount.getAccountLoan());
+        } catch (MavenBankException e) {
+            e.printStackTrace();
+        }
     }
 
 }

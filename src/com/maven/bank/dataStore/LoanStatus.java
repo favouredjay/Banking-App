@@ -5,5 +5,6 @@ public enum LoanStatus {
     DECLINED,
     PENDING,
     CLOSED,
+    NEW,
     DEFAULT;
 }

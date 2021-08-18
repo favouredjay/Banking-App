@@ -1,5 +1,6 @@
 package com.maven.bank.services;
 
+import com.maven.bank.dataStore.LoanStatus;
 import com.maven.bank.entities.Account;
 import com.maven.bank.entities.CurrentAccount;
 import com.maven.bank.entities.Customer;
@@ -145,6 +146,11 @@ public class AccountServiceImpl implements AccountServices {
     @Override
     public void applyForOverdraft(Account theAccount) {
         //TODO
+    }
+
+    @Override
+    public LoanStatus applyForLoan(Account theAccount) {
+return null;
     }
 
     private boolean accountTypeExists (Customer aCustomer, String typeName){
