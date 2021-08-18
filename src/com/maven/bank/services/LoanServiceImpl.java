@@ -23,10 +23,13 @@ public class LoanServiceImpl implements LoanService{
         return theLoan;
     }
     private LoanStatus decideOnLoan (Account accountSeekingLoan) throws MavenBankLoanException {
-
         LoanStatus decision = LoanStatus.PENDING;
+        Loan theLoan = accountSeekingLoan.getAccountLoan();
         BigDecimal accountBalancePercentage = BigDecimal.valueOf(0.2);
         BigDecimal loanAmountApprovedAutomatically = accountSeekingLoan.getBalance().multiply(accountBalancePercentage);
+        if(theLoan.getLoanAmount().compareTo(loanAmountApprovedAutomatically) <BigDecimal.ZERO.intValue()){
+            decision = LoanStatus.APPROVED;
+        }
         return decision;
     }
 }
