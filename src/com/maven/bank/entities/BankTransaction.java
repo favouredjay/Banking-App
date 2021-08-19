@@ -1,11 +1,23 @@
 package com.maven.bank.entities;
 
 import com.maven.bank.dataStore.TransactionType;
+import com.maven.bank.services.BankService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class BankTransaction {
+    private long id;
+    private LocalDateTime dateTime;
+    private TransactionType transactionType;
+    private BigDecimal txAmount;
+
+    public BankTransaction(TransactionType type, BigDecimal amount){
+        this.id = BankService.generateAccountNumber();
+        this.dateTime = LocalDateTime.now();
+        this.transactionType = type;
+        txAmount = amount;
+    }
     public long getId() {
         return id;
     }
@@ -30,18 +42,14 @@ public class BankTransaction {
         this.transactionType = transactionType;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getTxAmount() {
+        return txAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setTxAmount(BigDecimal txAmount) {
+        this.txAmount = txAmount;
     }
 
-    private long id;
-   private LocalDateTime dateTime;
-   private TransactionType transactionType;
-   private BigDecimal amount;
 
 
 

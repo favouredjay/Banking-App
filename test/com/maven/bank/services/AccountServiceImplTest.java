@@ -1,7 +1,9 @@
 package com.maven.bank.services;
 
 import com.maven.bank.dataStore.LoanRequestStatus;
+import com.maven.bank.dataStore.TransactionType;
 import com.maven.bank.entities.Account;
+import com.maven.bank.entities.BankTransaction;
 import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
@@ -312,7 +314,32 @@ public class AccountServiceImplTest {
             e.printStackTrace();
         }
     }
+    @Test
+    void addBankTransactionWithNullTransaction(){
+        assertThrows(MavenBankTransactionException.class,()->accountService.addBankTransaction(null, joyAccount));
+    }
+    @Test
+    void addBankTransactionWithNullAccount(){
+        BankTransaction transaction = new BankTransaction(TransactionType.DEPOSIT,BigDecimal.valueOf(30000));
+        assertThrows(MavenBankTransactionException.class,()->accountService.addBankTransaction(null, null));
+    }
+    @Test
+    void addBankTransactionWithDeposit(){
+        try{
+            Account janeSavingsAccount = accountService.findAccount(1000110003);
+            assertNotNull(janeSavingsAccount);
+            assertEquals(BigDecimal.ZERO, janeSavingsAccount.getBalance());
+            assertEquals(0, janeSavingsAccount.getTransactions().size());
+            BankTransaction janeDeposit = new BankTransaction(TransactionType.DEPOSIT, BigDecimal.valueOf(10000));
+            accountService.addBankTransaction(janeDeposit, janeSavingsAccount);
+            assertEquals(BigDecimal.valueOf(10000), janeSavingsAccount.getBalance());
+            assertEquals(1, janeSavingsAccount.getTransactions().size());
 
+
+        }catch (MavenBankException | MavenBankInsufficientBankException e){
+            e.printStackTrace();
+        }
+    }
 }
 
 

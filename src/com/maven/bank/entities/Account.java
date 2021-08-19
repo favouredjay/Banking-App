@@ -14,7 +14,15 @@ public abstract class Account {
     private static String accountPin;
     private LoanRequest accountLoanRequest;
     private LocalDateTime startDate;
-    private Set<BankTransaction>transactions = new HashSet<>();
+    private Set<BankTransaction> transactions = new HashSet<>();
+
+    public Set<BankTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<BankTransaction> transactions) {
+        this.transactions = transactions;
+    }
 
     public LocalDateTime getStartDate() {
         return startDate;
@@ -52,7 +60,6 @@ public abstract class Account {
     public static String getAccountPin() {
         return accountPin;
     }
-
 
 
     public void setAccountPin(String accountPin) throws MavenBankTransactionException {
