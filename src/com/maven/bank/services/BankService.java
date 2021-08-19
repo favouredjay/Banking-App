@@ -6,8 +6,20 @@ public class BankService {
 
         private static long currentBVN = 2;
         private static long currentAccountNumber = 1000110003;
-        private static LocalDate yearOfOpening;
+    private static long currentTransactionId = 0;
+    private static LocalDate yearOfOpening;
 
+    public static long CurrentTransactionId() {
+        return currentTransactionId;
+    }
+
+    private static long generateTransactionId(long currentTransactionId) {
+        currentTransactionId++;
+        return currentTransactionId;
+    }
+    private static void setCurrentTransactionId(long currentTransactionId){
+        BankService.currentTransactionId = currentTransactionId;
+    }
     public static LocalDate getYearOfOpening() {
         return yearOfOpening;
     }
@@ -47,4 +59,5 @@ public class BankService {
             currentBVN = 2;
             currentAccountNumber = 1000110003;
     }
+
 }

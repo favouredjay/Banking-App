@@ -1,9 +1,6 @@
 package com.maven.bank.dataStore;
 
-import com.maven.bank.entities.Account;
-import com.maven.bank.entities.CurrentAccount;
-import com.maven.bank.entities.Customer;
-import com.maven.bank.entities.SavingsAccount;
+import com.maven.bank.entities.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -36,7 +33,7 @@ public class CustomerRepo {
         john.setPhone ("12345678901");
         Account johnSavingsAccount = new SavingsAccount(1000110001);
         john.getAccounts().add(johnSavingsAccount);
-
+        BankTransaction initialDeposit = new BankTransaction();
 
         Account johnCurrentAccount = new CurrentAccount(1000110002,  new BigDecimal(50000000));
         john.getAccounts().add(johnCurrentAccount);
