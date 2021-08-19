@@ -2,6 +2,8 @@ package com.maven.bank.entities;
 
 import com.maven.bank.entities.Account;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,17 @@ public class Customer {
         private String email;
         private String phone;
         private String password;
+        private LocalDateTime relationshipStartDate;
 
-        public String getEmail() {
+    public LocalDateTime getRelationshipStartDate() {
+        return relationshipStartDate;
+    }
+
+    public void setRelationshipStartDate(LocalDateTime relationshipStartDate) {
+        this.relationshipStartDate = relationshipStartDate;
+    }
+
+    public String getEmail() {
             return email;
         }
 

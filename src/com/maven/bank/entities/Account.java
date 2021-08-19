@@ -1,22 +1,32 @@
 package com.maven.bank.entities;
 
-import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.exceptions.MavenBankTransactionException;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public abstract class Account {
     private long accountNumber;
     private BigDecimal balance = BigDecimal.ZERO;
     private static String accountPin;
-    private Loan accountLoan;
+    private LoanRequest accountLoanRequest;
+    private LocalDateTime startDate;
 
-    public Loan getAccountLoan() {
-        return accountLoan;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setAccountLoan(Loan accountLoan) {
-        this.accountLoan = accountLoan;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LoanRequest getAccountLoanRequest() {
+        return accountLoanRequest;
+    }
+
+    public void setAccountLoanRequest(LoanRequest accountLoanRequest) {
+        this.accountLoanRequest = accountLoanRequest;
     }
 
     public long getAccountNumber() {
@@ -39,6 +49,8 @@ public abstract class Account {
     public static String getAccountPin() {
         return accountPin;
     }
+
+
 
     public void setAccountPin(String accountPin) throws MavenBankTransactionException {
         Account.accountPin = accountPin;

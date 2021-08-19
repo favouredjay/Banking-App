@@ -1,10 +1,22 @@
 package com.maven.bank.services;
 
+import java.time.LocalDate;
+
 public class BankService {
 
         private static long currentBVN = 2;
         private static long currentAccountNumber = 1000110003;
-        public static long generateBvn(){
+        private static LocalDate yearOfOpening;
+
+    public static LocalDate getYearOfOpening() {
+        return yearOfOpening;
+    }
+
+    public static void setYearOfOpening(LocalDate yearOfOpening) {
+        BankService.yearOfOpening = yearOfOpening;
+    }
+
+    public static long generateBvn(){
             currentBVN++;
             return currentBVN;
         }

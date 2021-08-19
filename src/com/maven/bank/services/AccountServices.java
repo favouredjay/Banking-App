@@ -1,5 +1,5 @@
 package com.maven.bank.services;
-import com.maven.bank.dataStore.LoanStatus;
+import com.maven.bank.dataStore.LoanRequestStatus;
 import com.maven.bank.entities.Account;
 import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
@@ -18,7 +18,8 @@ public interface AccountServices {
      public Account findAccount(long accountNumber) throws MavenBankException;
      public Account findAccount(Customer customer, long accountNumber) throws MavenBankException;
      public void applyForOverdraft(Account theAccount);
-     public LoanStatus applyForLoan(Account theAccount);
+     public LoanRequestStatus applyForLoan(Account theAccount);
+
 
 
 

@@ -1,11 +1,11 @@
 package com.maven.bank.services;
 
-import com.maven.bank.dataStore.LoanStatus;
+import com.maven.bank.dataStore.LoanRequestStatus;
 import com.maven.bank.entities.Account;
 import com.maven.bank.entities.Customer;
 import com.maven.bank.dataStore.AccountType;
 import com.maven.bank.dataStore.CustomerRepo;
-import com.maven.bank.entities.Loan;
+import com.maven.bank.entities.LoanRequest;
 import com.maven.bank.exceptions.MavenBankException;
 import com.maven.bank.exceptions.MavenBankInsufficientBankException;
 import com.maven.bank.exceptions.MavenBankTransactionException;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.maven.bank.dataStore.LoanStatus.NEW;
+import static com.maven.bank.dataStore.LoanRequestStatus.NEW;
 import static com.maven.bank.dataStore.LoanType.SME;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -295,19 +295,19 @@ public class AccountServiceImplTest {
     }
     @Test
     void applyForLoan(){
-        Loan johnLoan = new Loan();
-        johnLoan.setLoanAmount(BigDecimal.valueOf(50000000));
-        johnLoan.setStartDate(LocalDateTime.now());
-        johnLoan.setInterestRate(0.1);
-        johnLoan.setStatus(NEW);
-        johnLoan.setTenor(24);
-        johnLoan.setType(SME);
+        LoanRequest johnLoanRequest = new LoanRequest();
+        johnLoanRequest.setLoanAmount(BigDecimal.valueOf(50000000));
+        johnLoanRequest.setStartDate(LocalDateTime.now());
+        johnLoanRequest.setInterestRate(0.1);
+        johnLoanRequest.setStatus(NEW);
+        johnLoanRequest.setTenor(24);
+        johnLoanRequest.setType(SME);
         try{
             Account johnCurrentAccount = accountService.findAccount(1000110002);
-            assertNull(johnCurrentAccount.getAccountLoan());
-            johnCurrentAccount.setAccountLoan(johnLoan);
-            LoanStatus decision = accountService.applyForLoan(johnCurrentAccount);
-            assertNotNull(johnCurrentAccount.getAccountLoan());
+            assertNull(johnCurrentAccount.getAccountLoanRequest());
+            johnCurrentAccount.setAccountLoanRequest(johnLoanRequest);
+            LoanRequestStatus decision = accountService.applyForLoan(johnCurrentAccount);
+            assertNotNull(johnCurrentAccount.getAccountLoanRequest());
         } catch (MavenBankException e) {
             e.printStackTrace();
         }

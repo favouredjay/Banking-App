@@ -1,6 +1,6 @@
 package com.maven.bank.services;
 
-import com.maven.bank.dataStore.LoanStatus;
+import com.maven.bank.dataStore.LoanRequestStatus;
 import com.maven.bank.entities.Account;
 import com.maven.bank.entities.CurrentAccount;
 import com.maven.bank.entities.Customer;
@@ -149,9 +149,10 @@ public class AccountServiceImpl implements AccountServices {
     }
 
     @Override
-    public LoanStatus applyForLoan(Account theAccount) {
+    public LoanRequestStatus applyForLoan(Account theAccount) {
 return null;
     }
+
 
     private boolean accountTypeExists (Customer aCustomer, String typeName){
         boolean accountTypeExists = false;
@@ -173,16 +174,13 @@ return null;
        if(account == null){
            throw new MavenBankException("Account not found");
        }
+        }
 
-
-
-   }
    public void checkForInsufficientAmount(BigDecimal amount, Account account, TransactionType type) throws MavenBankInsufficientBankException {
        if(type== TransactionType.WITHDRAW&& amount.compareTo(account.getBalance()) > BigDecimal.ZERO.intValue()){
            throw new MavenBankInsufficientBankException("Insufficient Account balance");
        }
-
-   }
+        }
 
 
 
