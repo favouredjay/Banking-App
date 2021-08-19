@@ -157,8 +157,11 @@ return null;
         }
         if(transaction.getTransactionType() == TransactionType.DEPOSIT){
             deposit(transaction.getTxAmount(), account.getAccountNumber());
-            account.getTransactions().add(transaction);
         }
+        else if(transaction.getTransactionType() == TransactionType.WITHDRAW){
+            withdraw(transaction.getTxAmount(), account.getAccountNumber());
+        }
+        account.getTransactions().add(transaction);
     }
 
 
