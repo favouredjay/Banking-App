@@ -5,6 +5,8 @@ import com.maven.bank.exceptions.MavenBankTransactionException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Account {
     private long accountNumber;
@@ -12,6 +14,7 @@ public abstract class Account {
     private static String accountPin;
     private LoanRequest accountLoanRequest;
     private LocalDateTime startDate;
+    private Set<BankTransaction>transactions = new HashSet<>();
 
     public LocalDateTime getStartDate() {
         return startDate;
