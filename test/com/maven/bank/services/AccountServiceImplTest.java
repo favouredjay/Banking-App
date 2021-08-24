@@ -86,7 +86,7 @@ public class AccountServiceImplTest {
     @Test
     void openTheSameTypeOfAccountForTheSameCustomer() {
         Optional<Customer> johnOptional = CustomerRepo.getCustomers().values().stream().findFirst();
-        Customer john = (johnOptional.isEmpty()) ? null : johnOptional.get();
+        Customer john = johnOptional.get();
         assertEquals(1000110003, BankService.getCurrentAccountNumber());
         assertNotNull(john);
         assertNotNull(john.getAccounts());
@@ -168,10 +168,10 @@ public class AccountServiceImplTest {
     void deposit() {
         try {
             Account johnSavingsAccount = accountService.findAccount(1000110001);
-            assertEquals(BigDecimal.ZERO, johnSavingsAccount.getBalance());
+            assertEquals(BigDecimal.valueOf(450000), johnSavingsAccount.getBalance());
             BigDecimal accountBalance = accountService.deposit(new BigDecimal(50000), 1000110001);
             johnSavingsAccount = accountService.findAccount(1000110001);
-            assertEquals(accountBalance, johnSavingsAccount.getBalance());
+            assertEquals(BigDecimal.valueOf(500000), johnSavingsAccount.getBalance());
             assertNotNull(johnSavingsAccount.getBalance());
 
         } catch (MavenBankTransactionException e) {
@@ -219,7 +219,7 @@ public class AccountServiceImplTest {
         try {
             long newAccount = accountService.openSavingsAccount(joy);
             assertFalse(CustomerRepo.getCustomers().isEmpty());
-            assertEquals(1000110004, BankService.getCurrentAccountNumber());
+            assertEquals(1000110007, BankService.getCurrentAccountNumber());
             assertTrue(CustomerRepo.getCustomers().containsKey(joy.getBvn()));
             assertFalse(joy.getAccounts().isEmpty());
             assertEquals(newAccount, joy.getAccounts().get(0).getAccountNumber());
@@ -239,11 +239,11 @@ public class AccountServiceImplTest {
     void depositVeryLargeAmount() {
         try {
             Account johnSavingsAccount = accountService.findAccount(1000110001);
-            assertEquals(BigDecimal.ZERO, johnSavingsAccount.getBalance());
+            assertEquals(BigDecimal.valueOf(450000), johnSavingsAccount.getBalance());
             BigDecimal depositAmount = new BigDecimal("100000000000000000000");
             BigDecimal accountBalance = accountService.deposit(depositAmount, 1000110001);
             johnSavingsAccount = accountService.findAccount(1000110001);
-            assertEquals(depositAmount, johnSavingsAccount.getBalance());
+            assertEquals(new BigDecimal("100000000000000450000"), johnSavingsAccount.getBalance());
             assertNotNull(johnSavingsAccount.getBalance());
 
         } catch (MavenBankTransactionException e) {
@@ -260,13 +260,13 @@ public class AccountServiceImplTest {
     void withdraw() {
         try {
             Account johnSavingsAccount = accountService.findAccount(1000110001);
-            assertEquals(BigDecimal.ZERO, johnSavingsAccount.getBalance());
-            BigDecimal accountBalance = accountService.deposit(new BigDecimal(50000), 1000110001);
-            assertEquals(accountBalance, johnSavingsAccount.getBalance());
-            johnSavingsAccount = accountService.findAccount(1000110001);
+            assertEquals(BigDecimal.valueOf(450000), johnSavingsAccount.getBalance());
+//            BigDecimal accountBalance = accountService.deposit(new BigDecimal(50000), 1000110001);
+//            assertEquals(accountBalance, johnSavingsAccount.getBalance());
+//            johnSavingsAccount = accountService.findAccount(1000110001);
 
-            BigDecimal newAccountBalance = accountService.withdraw(new BigDecimal(25000), 1000110001);
-            assertEquals(newAccountBalance, johnSavingsAccount.getBalance());
+            BigDecimal newAccountBalance = accountService.withdraw(new BigDecimal(40000), 1000110001);
+            assertEquals(BigDecimal.valueOf(410000), johnSavingsAccount.getBalance());
             assertNotNull(johnSavingsAccount.getBalance());
 
         } catch (MavenBankTransactionException e) {
@@ -286,14 +286,13 @@ public class AccountServiceImplTest {
     void withdrawInsufficientFunds() {
         try{
             Account johnSavingsAccount = accountService.findAccount(1000110001);
-            BigDecimal accountBalance = accountService.deposit(new BigDecimal(50000), 1000110001);
-            assertEquals(accountBalance, johnSavingsAccount.getBalance());
+            assertEquals(BigDecimal.valueOf(450000), johnSavingsAccount.getBalance());
 
-        }catch (MavenBankException | MavenBankInsufficientBankException e){
+        }catch (MavenBankException e){
             e.printStackTrace();
         }
 
-        assertThrows(MavenBankInsufficientBankException.class,()->accountService.withdraw(new BigDecimal(100000), 1000110001));
+        assertThrows(MavenBankInsufficientBankException.class,()->accountService.withdraw(new BigDecimal(500000), 1000110001));
     }
     @Test
     void applyForLoan(){
@@ -384,12 +383,12 @@ public class AccountServiceImplTest {
         try {
             Account janeSavingAccount = accountService.findAccount(1000110001);
             assertNotNull(janeSavingAccount);
-            assertEquals(BigDecimal.ZERO, janeSavingAccount.getBalance());
-            assertEquals(0, janeSavingAccount.getTransactions().size());
+            assertEquals(BigDecimal.valueOf(450000), janeSavingAccount.getBalance());
+            assertEquals(4, janeSavingAccount.getTransactions().size());
             BankTransaction withdraw = new BankTransaction(TransactionType.WITHDRAW, BigDecimal.valueOf(-50000));
             assertThrows(MavenBankTransactionException.class, () -> accountService.addBankTransaction(withdraw, joyAccount));
-            assertEquals(BigDecimal.ZERO, janeSavingAccount.getBalance());
-            assertEquals(0, janeSavingAccount.getTransactions().size());
+            assertEquals(BigDecimal.valueOf(450000), janeSavingAccount.getBalance());
+            assertEquals(4, janeSavingAccount.getTransactions().size());
         }catch (MavenBankException e){
             e.printStackTrace();
         }

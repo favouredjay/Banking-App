@@ -36,7 +36,7 @@ public class CustomerRepo {
         john.setSurname ("doe");
         john.setPhone ("12345678901");
         Account johnSavingsAccount = new SavingsAccount(1000110001);
-        john.getAccounts().add(johnSavingsAccount);
+
         john.setRelationshipStartDate(johnAccount.getStartDate());
 
         BankTransaction initialDeposit = new BankTransaction(TransactionType.DEPOSIT, BigDecimal.valueOf(300000));
@@ -56,7 +56,7 @@ public class CustomerRepo {
         johnSavingsAccount.getTransactions().add(julyAllowance);
 
         johnSavingsAccount.setBalance(BigDecimal.valueOf(450000));
-
+        john.getAccounts().add(johnSavingsAccount);
         Account johnCurrentAccount = new CurrentAccount(1000110002,  new BigDecimal(50000000));
         john.getAccounts().add(johnCurrentAccount);
         customers.put(john.getBvn(), john);
